@@ -1,0 +1,11 @@
+streamlit
+youtube_transcript_api
+langchain
+langchain-openai
+langchain-community
+langchain-core
+openai
+faiss-cpu
+deep-translator
+pandas
+plotly
