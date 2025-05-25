@@ -6,10 +6,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
-from dotenv import load_dotenv
 from youtube_transcript_api.proxies import WebshareProxyConfig
 
-load_dotenv()
 st.title("YouTube Video Chat Assistant")
 # Prompt for API Key
 if 'openai_api_key' not in st.session_state:
@@ -124,7 +122,7 @@ if st.button("Process Video"):
             retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k": 2})
             
             # LLM setup
-            llm = ChatOpenAI(model="gpt-4", temperature=0.2)
+            llm = ChatOpenAI(model="gpt-4", temperature=0.2, openai_api_key=st.session_state.openai_api_key)
             
             # Prompt template
             prompt = PromptTemplate(
