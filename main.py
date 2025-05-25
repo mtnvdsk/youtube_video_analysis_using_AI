@@ -10,6 +10,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 st.title("YouTube Video Chat Assistant")
+# Prompt for API Key
+if 'openai_api_key' not in st.session_state:
+    st.session_state.openai_api_key = ""
+
+st.session_state.openai_api_key = st.text_input(
+    "Enter your OpenAI API Key",
+    type="password",
+    value=st.session_state.openai_api_key
+)
+
+# Proceed only if API key is entered
+if not st.session_state.openai_api_key:
+    st.warning("Please enter your OpenAI API key to proceed.")
+    st.stop()
 
 # Input for YouTube video ID
 video_id = st.text_input("Enter YouTube Video ID", "Gfr50f6ZBvo")
@@ -78,7 +92,7 @@ if st.button("Process Video"):
         with st.spinner("Processing video transcript..."):
             # Get transcript
             def translate(text):
-                llm = ChatOpenAI(model="gpt-4", temperature=0.2)
+                llm = ChatOpenAI(model="gpt-4", temperature=0.2,openai_api_key=st.session_state.openai_api_key)
                 prompt = PromptTemplate(
                     template="Translate the following text to English: {text}",
                     input_variables=["text"]
@@ -99,7 +113,7 @@ if st.button("Process Video"):
             chunks = splitter.create_documents([transcript])
             
             # Embedding
-            embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+            embeddings = OpenAIEmbeddings(model="text-embedding-3-small",openai_api_key=st.session_state.openai_api_key)
             
             # Vector store
             vector_store = FAISS.from_documents(chunks, embeddings)
