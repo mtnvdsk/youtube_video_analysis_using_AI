@@ -7,6 +7,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
 from dotenv import load_dotenv
+from youtube_transcript_api.proxies import WebshareProxyConfig
 
 load_dotenv()
 st.title("YouTube Video Chat Assistant")
@@ -100,8 +101,11 @@ if st.button("Process Video"):
                 parser = StrOutputParser()
                 chain= prompt|llm|parser
                 return chain.invoke({'text':text})
-                
-            transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[selected_language])
+            youtube_api = YouTubeTranscriptApi(proxy_config=WebshareProxyConfig(
+                proxy_username="qdeedbqj",
+                proxy_password="9q7h8cmcgcow",
+            ))
+            transcript_list = youtube_api.get_transcript(video_id, languages=[selected_language])
             
             transcript = " ".join(chunk["text"] for chunk in transcript_list)
             if selected_language != "en":
