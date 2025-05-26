@@ -66,7 +66,6 @@ if st.button("Check Available Languages"):
     try:
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
         available_languages = []
-        st.write(st.session_state.openai_api_key)
         for transcript in transcript_list:
             lang_code = transcript.language_code
             lang_name = LANGUAGE_CODES.get(lang_code, lang_code)
