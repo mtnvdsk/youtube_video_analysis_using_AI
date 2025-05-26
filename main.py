@@ -99,8 +99,12 @@ if st.button("Process Video"):
                 parser = StrOutputParser()
                 chain= prompt|llm|parser
                 return chain.invoke({'text':text})
-            transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[selected_language])
-            
+            #transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[selected_language])
+            youtube_api = YouTubeTranscriptApi(proxy_config=WebshareProxyConfig(
+                proxy_username="qdeedbqj",
+                proxy_password="9q7h8cmcgcow",
+            ))
+            transcript_list = youtube_api.get_transcript(video_id, languages=[selected_language])
             transcript = " ".join(chunk["text"] for chunk in transcript_list)
             if selected_language != "en":
                 st.info(f"Translating from {LANGUAGE_CODES[selected_language]} to English...")
